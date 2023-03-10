@@ -1,19 +1,16 @@
 {
   "name": "code-and-coffee-service",
-  "version": "1.0.0",
-  "description": "Service and custom code API for the code and coffee website.",
-  "main": "index.js",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Bjtowne/Code-and-Coffee-Service.git"
-  },
-  "author": "Brian Towne",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Bjtowne/Code-and-Coffee-Service/issues"
-  },
-  "homepage": "https://github.com/Bjtowne/Code-and-Coffee-Service#readme"
+  "devDependencies": {
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0",
+    "@types/node": "^18.15.0"
+  }
 }
