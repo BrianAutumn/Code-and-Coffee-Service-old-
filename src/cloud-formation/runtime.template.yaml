@@ -1,3 +1,4 @@
+# This Cloud Formation template is used for runtime infrastructure
 AWSTemplateFormatVersion: 2010-09-09
 Resources:
   LambdaFunction:
@@ -115,74 +116,3 @@ Resources:
             MinTTL: 300
     DependsOn:
       - ApiGatewayHttpApi
-    Metadata:
-      'AWS::CloudFormation::Designer':
-        id: 64266757-f587-44d7-a043-0656e3ea34d5
-Metadata:
-  'AWS::CloudFormation::Designer':
-    b1071f96-a1df-4bbf-bf72-c86cfa922a91:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 60
-        'y': 90
-      z: 1
-      embeds: []
-    64266757-f587-44d7-a043-0656e3ea34d5:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 60
-        'y': -10
-      z: 1
-      embeds: []
-      dependson:
-        - b1071f96-a1df-4bbf-bf72-c86cfa922a91
-    7108ae17-0ca7-407e-9d08-84f372534826:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 350
-        'y': 210
-      z: 1
-      embeds: []
-    9dc93ca0-621f-44e1-8dc6-e04482b12685:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 240
-        'y': 210
-      z: 1
-      embeds: []
-    ded1e389-aab8-43a0-9481-aec4993160a7:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 120
-        'y': 210
-      z: 1
-      embeds: []
-      dependson:
-        - 9dc93ca0-621f-44e1-8dc6-e04482b12685
-    79dc1096-966f-4434-97a7-37419a02cae1:
-      size:
-        width: 60
-        height: 60
-      position:
-        x: 10
-        'y': 210
-      z: 1
-      embeds: []
-    7d5d939e-c11c-4ec9-a80c-a5a9ac7d7951:
-      source:
-        id: ded1e389-aab8-43a0-9481-aec4993160a7
-        selector: 'g:nth-child(1) g:nth-child(4) g:nth-child(1) circle:nth-child(1)     '
-        port: 'AWS::DependencyLink-*'
-      target:
-        id: 9dc93ca0-621f-44e1-8dc6-e04482b12685
-      z: 12
