@@ -1,0 +1,19 @@
+# Nested CloudFormation stack to allow us to tag all the resources properly.
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  DeployBucketName:
+    Type: String
+    Description: The deploy bucket name.
+  AppName:
+    Type: String
+    Description: The name of the application.
+Resources:
+  MyNestedStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://s3.amazonaws.com/${DeployBucketName}/deploy.template.yaml
+      Parameters:
+        DeployBucketName: !Ref DeployBucketName
+      Tags:
+        - Key: app
+          Value: !Ref AppName

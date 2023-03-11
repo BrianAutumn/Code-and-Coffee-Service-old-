@@ -38,21 +38,19 @@ jobs:
         env:
           BUILD_NUMBER: ${{ github.run_number }}
           BUILD_DATE: ${{ steps.time.outputs.formattedTime }}
+      - uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r build.zip build
       - name: Create Deploy Bucket
         run: aws s3 mb s3://${{ secrets.S3_BUCKET_DEPLOY_NAME }}
+      - name: Upload lambda-package.zip to S3
+        run: aws s3 cp build.zip s3://${{ secrets.S3_BUCKET_DEPLOY_NAME }}/lambda-package.zip
+      - name: Upload deploy.template.yaml to S3
+        run: aws s3 cp deploy.template.yaml s3://${{ secrets.S3_BUCKET_DEPLOY_NAME }}/deploy.template.yaml
       - name: Execute CloudFormation template
-        run: aws cloudformation deploy --template-file ./src/cloud-formation/runtime.template.yaml --stack-name ${{ secrets.CLOUDFORMATION_STACK_NAME }}
-      - name: Deploy
-        uses: reggionick/s3-deploy@v3
-        with:
-          folder: dist
-          bucket: ${{ secrets.S3_BUCKET }}
-          bucket-region: ${{ secrets.S3_BUCKET_REGION }}
-          dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
-          invalidation: /
-          delete-removed: true
-          no-cache: true
-          private: true
+        run: aws cloudformation deploy --template-file ./src/cloud-formation/runtime.template.yaml --stack-name ${{ secrets.CLOUDFORMATION_STACK_NAME }} --parameter-overrides DeployBucketName={{ secrets.S3_BUCKET_DEPLOY_NAME }}
+      - name: Upload dist to web resources bucket
+        run: aws s3 sync dist s3://code-and-coffee-service-web-resources
       - name: Publish SNS topic success
         if: ${{ success() }}
         uses: nothingalike/sns-publish-topic@v1.6
