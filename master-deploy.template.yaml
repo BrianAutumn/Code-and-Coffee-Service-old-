@@ -5,7 +5,7 @@ Parameters:
     Type: String
     Description: The deploy bucket name.
 Resources:
-  MyNestedStack:
+  CodeAndCoffeeServiceNested:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub https://s3.amazonaws.com/${DeployBucketName}/deploy.template.yaml

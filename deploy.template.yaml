@@ -17,7 +17,7 @@ Resources:
         S3Key: lambda-package.zip
       Handler: index.handler
       MemorySize: 128
-      Role: arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Role: arn:aws:iam::848023796141:role/code-and-coffee-service-lambda-role
       Runtime: nodejs14.x
       Timeout: 10
   ApiGatewayHttpApi:
