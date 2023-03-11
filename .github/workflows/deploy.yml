@@ -38,6 +38,7 @@ jobs:
         env:
           BUILD_NUMBER: ${{ github.run_number }}
           BUILD_DATE: ${{ steps.time.outputs.formattedTime }}
+          BRANCH_NAME: ${GITHUB_REF##*/}
       - uses: montudor/action-zip@v1
         with:
           args: zip -qq -r lambda-package.zip lambda-package

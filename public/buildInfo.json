@@ -1,4 +1,5 @@
 {
   "buildNumber": "##BUILD_NUMBER##",
-  "buildDate": "##BUILD_DATE##"
+  "buildDate": "##BUILD_DATE##",
+  "branchName": "##BRANCH_NAME##"
 }
