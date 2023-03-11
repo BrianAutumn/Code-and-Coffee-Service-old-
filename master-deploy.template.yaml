@@ -4,9 +4,6 @@ Parameters:
   DeployBucketName:
     Type: String
     Description: The deploy bucket name.
-  AppName:
-    Type: String
-    Description: The name of the application.
 Resources:
   MyNestedStack:
     Type: AWS::CloudFormation::Stack
@@ -16,4 +13,4 @@ Resources:
         DeployBucketName: !Ref DeployBucketName
       Tags:
         - Key: app
-          Value: !Ref AppName
+          Value: code-and-coffee-service
