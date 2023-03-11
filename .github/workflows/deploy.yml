@@ -39,7 +39,7 @@ jobs:
           BUILD_DATE: ${{ steps.time.outputs.formattedTime }}
       - uses: montudor/action-zip@v1
         with:
-          args: zip -qq -r build.zip build
+          args: zip -qq -r lambda-package.zip lambda-package
       - name: Create Deploy Bucket
         run: aws s3 mb s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}
       - name: Upload lambda-package.zip to S3
