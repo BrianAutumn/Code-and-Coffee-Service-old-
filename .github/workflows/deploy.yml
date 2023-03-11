@@ -51,6 +51,8 @@ jobs:
         run: aws cloudformation deploy --template-file ./src/cloud-formation/runtime.template.yaml --stack-name code-and-coffee-service --parameter-overrides DeployBucketName={{ secrets.S3_DEPLOY_BUCKET_NAME }}
       - name: Upload dist to web resources bucket
         run: aws s3 sync dist s3://code-and-coffee-service-web-resources
+      - name: Delete deploy bucket
+        run: aws s3 rb s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }} --force
       - name: Publish SNS topic success
         if: ${{ success() }}
         uses: nothingalike/sns-publish-topic@v1.6
