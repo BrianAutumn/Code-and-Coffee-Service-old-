@@ -9,29 +9,9 @@ Resources:
         S3Key: deploy-package.zip
       Handler: index.handler
       MemorySize: 128
-      Role: !GetAtt LambdaExecutionRole.Arn
+      Role: arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Runtime: nodejs14.x
       Timeout: 10
-    DependsOn:
-      - LambdaExecutionRole
-    Metadata:
-      "AWS::CloudFormation::Designer":
-        id: 9dc93ca0-621f-44e1-8dc6-e04482b12685
-  LambdaExecutionRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: "sts:AssumeRole"
-      ManagedPolicyArns:
-        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-    Metadata:
-      "AWS::CloudFormation::Designer":
-        id: 7108ae17-0ca7-407e-9d08-84f372534826
   ApiGatewayHttpApi:
     Type: "AWS::ApiGatewayV2::Api"
     Properties:
@@ -45,9 +25,6 @@ Resources:
           - "*"
         AllowMethods:
           - GET
-    Metadata:
-      "AWS::CloudFormation::Designer":
-        id: b1071f96-a1df-4bbf-bf72-c86cfa922a91
   ApiGatewayHttpApiIntegration:
     Type: "AWS::ApiGatewayV2::Integration"
     Properties:
@@ -59,9 +36,6 @@ Resources:
     DependsOn:
       - ApiGatewayHttpApi
       - LambdaFunction
-    Metadata:
-      "AWS::CloudFormation::Designer":
-        id: ded1e389-aab8-43a0-9481-aec4993160a7
   ApiGatewayHttpApiRoute:
     Type: "AWS::ApiGatewayV2::Route"
     Properties:
@@ -74,9 +48,6 @@ Resources:
     DependsOn:
       - ApiGatewayHttpApiIntegration
       - ApiGatewayHttpApi
-    Metadata:
-      "AWS::CloudFormation::Designer":
-        id: 79dc1096-966f-4434-97a7-37419a02cae1
   CloudFrontDistribution:
     Type: "AWS::CloudFront::Distribution"
     Properties:

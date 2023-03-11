@@ -8,9 +8,8 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   build: {
     lib: {
-      entry: {
-        CoffeeCalendar: resolve(__dirname, "src/CoffeeCalendar.ts"),
-      },
+      entry: resolve(__dirname, "src/web/CoffeeCalendar.ts"),
+      name: "CoffeeCalendar",
       fileName: "coffee-calendar",
     },
   },
