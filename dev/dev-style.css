@@ -8,10 +8,11 @@
 }
 
 .holder {
-  width:500px;
-  height:500px;
+  width: 500px;
+  height: 500px;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }

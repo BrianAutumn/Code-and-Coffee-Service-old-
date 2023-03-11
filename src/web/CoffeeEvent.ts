@@ -3,21 +3,21 @@
  */
 class CoffeeEvent extends HTMLElement {
   static get observedAttributes() {
-    return ['title', 'description', 'start'];
+    return ["title", "description", "start"];
   }
 
   private readonly titleElement;
   private readonly startElement;
 
-  private meetupUrl:undefined|string;
-  private meetupEventId:undefined|string;
-  private meetupGroup:undefined|string;
+  private meetupUrl: undefined | string;
+  private meetupEventId: undefined | string;
+  private meetupGroup: undefined | string;
 
   constructor() {
     super();
 
-    this.attachShadow({mode: 'open'});
-    const template = document.createElement('template');
+    this.attachShadow({ mode: "open" });
+    const template = document.createElement("template");
     template.innerHTML = `
       <style>
       ._event-holder {
@@ -87,51 +87,72 @@ class CoffeeEvent extends HTMLElement {
           </div>
         </div>
       </div>
-    `
+    `;
     this.shadowRoot?.appendChild(template.content.cloneNode(true));
-    this.titleElement = this.shadowRoot?.querySelector('._event-title') as HTMLHeadingElement
-    this.startElement = this.shadowRoot?.querySelector('._event-start') as HTMLParagraphElement;
-    this.shadowRoot?.querySelector('._event-meetup-logo')?.addEventListener('click', () => {
-      window.open(this.meetupUrl, '_blank');
-    })
+    this.titleElement = this.shadowRoot?.querySelector(
+      "._event-title"
+    ) as HTMLHeadingElement;
+    this.startElement = this.shadowRoot?.querySelector(
+      "._event-start"
+    ) as HTMLParagraphElement;
+    this.shadowRoot
+      ?.querySelector("._event-meetup-logo")
+      ?.addEventListener("click", () => {
+        window.open(this.meetupUrl, "_blank");
+      });
     this.updateStartElement();
     this.updateTitleElement();
   }
 
   updateTitleElement(): void {
-    this.titleElement.innerText = this.getAttribute('title') || '';
+    this.titleElement.innerText = this.getAttribute("title") || "";
   }
 
   updateStartElement(): void {
-    const date = new Date(this.getAttribute('start') || '');
-    const day = date.toLocaleDateString('en-US', {weekday: 'long', month: 'long', day: 'numeric'});
-    const time = date.toLocaleTimeString('en-US', {hour: 'numeric', minute: 'numeric'});
+    const date = new Date(this.getAttribute("start") || "");
+    const day = date.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+    });
+    const time = date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+    });
     if (this.startElement) {
       this.startElement.innerText = `${day} at ${time}`;
     }
   }
 
-  attributeChangedCallback(name:string, oldValue:string, newValue:string): void {
+  attributeChangedCallback(
+    name: string,
+    oldValue: string,
+    newValue: string
+  ): void {
     if (oldValue !== newValue) {
       switch (name) {
-        case 'title':
-          this.updateTitleElement()
+        case "title":
+          this.updateTitleElement();
           break;
-        case 'description':
+        case "description":
           let match = newValue.match(/https:\/\/www.meetup.com\/.*\//g);
           if (match) {
             this.meetupUrl = match[0];
-            this.meetupGroup = this.meetupUrl.match(/(?<=https:\/\/www.meetup.com\/).*(?=\/events)/g)?.[0];
-            this.meetupEventId = this.meetupUrl.match(/(?<=\/events\/).*(?=\/)/g)?.[0];
+            this.meetupGroup = this.meetupUrl.match(
+              /(?<=https:\/\/www.meetup.com\/).*(?=\/events)/g
+            )?.[0];
+            this.meetupEventId = this.meetupUrl.match(
+              /(?<=\/events\/).*(?=\/)/g
+            )?.[0];
             console.log(this.meetupUrl, this.meetupGroup, this.meetupEventId);
           }
           break;
-        case 'start':
-          this.updateStartElement()
+        case "start":
+          this.updateStartElement();
           break;
       }
     }
   }
 }
 
-customElements.define('coffee-event', CoffeeEvent);
+customElements.define("coffee-event", CoffeeEvent);

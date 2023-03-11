@@ -1,0 +1,71 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    steps:
+      - name: Get current time
+        uses: srfrnk/current-time@master
+        id: time
+        with:
+          format: LLLL
+          utcOffset: ${{ secrets.UTC_OFFSET }}
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Replace tokens
+        uses: cschleiden/replace-tokens@v1
+        with:
+          tokenPrefix: "##"
+          tokenSuffix: "##"
+          files: '["**/*.js","**/**/*.js","**/*.json","**/**/*.json","**/*.ts","**/**/*.ts"]'
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+          BUILD_DATE: ${{ steps.time.outputs.formattedTime }}
+      - name: Get dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Deploy
+        uses: reggionick/s3-deploy@v3
+        with:
+          folder: dist
+          bucket: ${{ secrets.S3_BUCKET }}
+          bucket-region: ${{ secrets.S3_BUCKET_REGION }}
+          dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          invalidation: /
+          delete-removed: true
+          no-cache: true
+          private: true
+      - name: Publish SNS topic success
+        if: ${{ success() }}
+        uses: nothingalike/sns-publish-topic@v1.6
+        with:
+          MESSAGE: "${{ github.repository }} '${{ github.workflow }}.${{ github.run_number }}' successful"
+          TOPIC_ARN: ${{ secrets.SNS_ARN }}
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Publish SNS topic failure
+        if: ${{ !success() }}
+        uses: nothingalike/sns-publish-topic@v1.6
+        with:
+          MESSAGE: "${{ github.repository }} '${{ github.workflow }}.${{ github.run_number }}' failure"
+          TOPIC_ARN: ${{ secrets.SNS_ARN }}
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -2,7 +2,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Resources:
   LambdaFunction:
-    Type: 'AWS::Lambda::Function'
+    Type: "AWS::Lambda::Function"
     Properties:
       Code:
         S3Bucket: general-deploy
@@ -15,10 +15,10 @@ Resources:
     DependsOn:
       - LambdaExecutionRole
     Metadata:
-      'AWS::CloudFormation::Designer':
+      "AWS::CloudFormation::Designer":
         id: 9dc93ca0-621f-44e1-8dc6-e04482b12685
   LambdaExecutionRole:
-    Type: 'AWS::IAM::Role'
+    Type: "AWS::IAM::Role"
     Properties:
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -26,44 +26,44 @@ Resources:
           - Effect: Allow
             Principal:
               Service: lambda.amazonaws.com
-            Action: 'sts:AssumeRole'
+            Action: "sts:AssumeRole"
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+        - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
     Metadata:
-      'AWS::CloudFormation::Designer':
+      "AWS::CloudFormation::Designer":
         id: 7108ae17-0ca7-407e-9d08-84f372534826
   ApiGatewayHttpApi:
-    Type: 'AWS::ApiGatewayV2::Api'
+    Type: "AWS::ApiGatewayV2::Api"
     Properties:
       Name: MyHttpApi
       ProtocolType: HTTP
       Description: An HTTP API for my Lambda function
       CorsConfiguration:
         AllowOrigins:
-          - '*'
+          - "*"
         AllowHeaders:
-          - '*'
+          - "*"
         AllowMethods:
           - GET
     Metadata:
-      'AWS::CloudFormation::Designer':
+      "AWS::CloudFormation::Designer":
         id: b1071f96-a1df-4bbf-bf72-c86cfa922a91
   ApiGatewayHttpApiIntegration:
-    Type: 'AWS::ApiGatewayV2::Integration'
+    Type: "AWS::ApiGatewayV2::Integration"
     Properties:
       ApiId: !Ref ApiGatewayHttpApi
       IntegrationType: AWS_PROXY
-      PayloadFormatVersion: '2.0'
+      PayloadFormatVersion: "2.0"
       IntegrationUri: !Sub >-
         arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations
     DependsOn:
       - ApiGatewayHttpApi
       - LambdaFunction
     Metadata:
-      'AWS::CloudFormation::Designer':
+      "AWS::CloudFormation::Designer":
         id: ded1e389-aab8-43a0-9481-aec4993160a7
   ApiGatewayHttpApiRoute:
-    Type: 'AWS::ApiGatewayV2::Route'
+    Type: "AWS::ApiGatewayV2::Route"
     Properties:
       ApiId: !Ref ApiGatewayHttpApi
       RouteKey: GET /hello
@@ -75,14 +75,14 @@ Resources:
       - ApiGatewayHttpApiIntegration
       - ApiGatewayHttpApi
     Metadata:
-      'AWS::CloudFormation::Designer':
+      "AWS::CloudFormation::Designer":
         id: 79dc1096-966f-4434-97a7-37419a02cae1
   CloudFrontDistribution:
-    Type: 'AWS::CloudFront::Distribution'
+    Type: "AWS::CloudFront::Distribution"
     Properties:
       DistributionConfig:
         Origins:
-          - DomainName: !Sub '${ApiGatewayHttpApi}.execute-api.${AWS::Region}.amazonaws.com'
+          - DomainName: !Sub "${ApiGatewayHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
             Id: apigateway
             CustomOriginConfig:
               HTTPPort: 80
