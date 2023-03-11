@@ -42,13 +42,13 @@ jobs:
         with:
           args: zip -qq -r lambda-package.zip lambda-package
       - name: Create Deploy Bucket
-        run: aws s3 mb s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}
+        run: aws s3 mb s3://code-and-coffee-service-deploy
       - name: Upload lambda-package.zip to S3
         run: aws s3 cp lambda-package.zip s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}/lambda-package.zip
       - name: Upload deploy.template.yaml to S3
         run: aws s3 cp deploy.template.yaml s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}/deploy.template.yaml
       - name: Execute CloudFormation template
-        run: aws cloudformation deploy --template-file ./src/cloud-formation/runtime.template.yaml --stack-name code-and-coffee-service --parameter-overrides DeployBucketName={{ secrets.S3_DEPLOY_BUCKET_NAME }}
+        run: aws cloudformation deploy --template-file master-deploy.template.yaml --stack-name code-and-coffee-service --parameter-overrides DeployBucketName={{ secrets.S3_DEPLOY_BUCKET_NAME }}
       - name: Upload dist to web resources bucket
         run: aws s3 sync dist s3://code-and-coffee-service-web-resources
       - name: Delete deploy bucket
