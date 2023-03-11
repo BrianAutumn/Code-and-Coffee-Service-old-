@@ -42,7 +42,7 @@ jobs:
         with:
           args: zip -qq -r lambda-package.zip lambda-package
       - name: Create Deploy Bucket
-        run: aws s3 mb s3://code-and-coffee-service-deploy
+        run: aws s3 mb s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}
       - name: Upload lambda-package.zip to S3
         run: aws s3 cp lambda-package.zip s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}/lambda-package.zip
       - name: Upload deploy.template.yaml to S3
