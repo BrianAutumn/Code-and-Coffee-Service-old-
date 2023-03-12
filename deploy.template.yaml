@@ -4,6 +4,9 @@ Parameters:
   DeployBucketName:
     Type: String
     Description: The deploy bucket name.
+  LambdaKey:
+    Type: String
+    Description: The key of the lambda package in the deploy bucket.
 Resources:
   WebResourcesBucket:
     Type: AWS::S3::Bucket
@@ -14,7 +17,7 @@ Resources:
     Properties:
       Code:
         S3Bucket: !Ref DeployBucketName
-        S3Key: lambda-package.zip
+        S3Key: !Ref LambdaKey
       Handler: index.handler
       MemorySize: 128
       Role: arn:aws:iam::848023796141:role/code-and-coffee-service-lambda-role

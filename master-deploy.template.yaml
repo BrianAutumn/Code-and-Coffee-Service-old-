@@ -4,6 +4,9 @@ Parameters:
   DeployBucketName:
     Type: String
     Description: The deploy bucket name.
+  LambdaKey:
+    Type: String
+    Description: The key of the lambda package in the deploy bucket.
 Resources:
   CodeAndCoffeeServiceNested:
     Type: AWS::CloudFormation::Stack
@@ -11,6 +14,7 @@ Resources:
       TemplateURL: !Sub https://s3.amazonaws.com/${DeployBucketName}/deploy.template.yaml
       Parameters:
         DeployBucketName: !Ref DeployBucketName
+        LambdaKey: !Ref LambdaKey
       Tags:
         - Key: app
           Value: code-and-coffee-service
