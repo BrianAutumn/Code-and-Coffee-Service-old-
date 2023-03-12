@@ -5,7 +5,7 @@ export async function handler(
   context: Context
 ): Promise<APIGatewayProxyResult> {
   console.log(event, context);
-  const responseBody = {};
+  const responseBody = {test:'value'};
   const responseHeaders = {
     "Content-Type": "application/json",
   };
