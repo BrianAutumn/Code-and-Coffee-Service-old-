@@ -53,7 +53,7 @@ Resources:
     Type: "AWS::ApiGatewayV2::Route"
     Properties:
       ApiId: !Ref ApiGatewayHttpApi
-      RouteKey: GET /hello
+      RouteKey: "$default"
       Target: !Join
         - /
         - - integrations
