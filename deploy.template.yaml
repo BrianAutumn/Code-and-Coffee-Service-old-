@@ -18,7 +18,7 @@ Resources:
   WebResourcesBucketPolicy:
     Type: "AWS::S3::BucketPolicy"
     Properties:
-      Bucket: !Ref WebResourcesBucket
+      Bucket: code-and-coffee-service-web-resources
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -26,7 +26,7 @@ Resources:
             Effect: "Allow"
             Principal: "*"
             Action: "s3:GetObject"
-            Resource: !Sub ${WebResourcesBucket.Arn}/*
+            Resource: arn:aws:s3:::code-and-coffee-service-web-resources/*
   LambdaFunction:
     Type: "AWS::Lambda::Function"
     Properties:
