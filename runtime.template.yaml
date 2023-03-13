@@ -89,7 +89,8 @@ Resources:
     Type: "AWS::CloudFront::Distribution"
     Properties:
       Tags:
-          app: code-and-coffee-service
+        - Key: app
+          Value: code-and-coffee-service
       DistributionConfig:
         Comment: Code and Coffee Service
         Origins:
