@@ -3,7 +3,7 @@ import { APIGatewayEvent, APIGatewayProxyResult } from "aws-lambda";
 export async function handler(
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> {
-  if(event.path !== '/test') {
+  if(event.path !== 'api/test') {
     return {
       statusCode: 404,
       body: 'Not found',
