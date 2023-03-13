@@ -16,16 +16,16 @@ Resources:
     Properties:
       BucketName: code-and-coffee-service-web-resources
   WebResourcesBucketPolicy:
-    Type: "AWS::S3::BucketPolicy"
+    Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: code-and-coffee-service-web-resources
       PolicyDocument:
-        Version: "2012-10-17"
         Statement:
-          - Sid: "Allow Public access to web resources"
-            Effect: "Allow"
-            Principal: "*"
-            Action: "s3:GetObject"
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: '*'
+            Action:
+              - 's3:GetObject'
             Resource: arn:aws:s3:::code-and-coffee-service-web-resources/*
   LambdaFunction:
     Type: "AWS::Lambda::Function"
