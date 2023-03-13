@@ -20,7 +20,7 @@ Resources:
     Properties:
       BucketName: !Sub code-and-coffee-service-web-resources-${RandomSeed}
       Tags:
-        - app: code-and-coffee-service
+          app: code-and-coffee-service
   WebResourcesBucketPolicy:
     Type: AWS::S3::BucketPolicy
     DeletionPolicy: Delete
@@ -37,7 +37,7 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       Tags:
-        - app: code-and-coffee-service
+          app: code-and-coffee-service
       Code:
         S3Bucket: !Sub code-and-coffee-service-deploy-${RandomSeed}
         S3Key: !Ref LambdaKey
@@ -50,7 +50,7 @@ Resources:
     Type: "AWS::ApiGatewayV2::Api"
     Properties:
       Tags:
-        - app: code-and-coffee-service
+          app: code-and-coffee-service
       Name: MyHttpApi
       ProtocolType: HTTP
       Description: An HTTP API for my Lambda function
@@ -87,7 +87,7 @@ Resources:
     Type: "AWS::CloudFront::Distribution"
     Properties:
       Tags:
-        - app: code-and-coffee-service
+          app: code-and-coffee-service
       DistributionConfig:
         Comment: Code and Coffee Service
         Origins:

@@ -41,7 +41,8 @@ jobs:
           BUILD_DATE: ${{ steps.time.outputs.formattedTime }}
           SHA: ${{ github.sha }}
           REF: ${{ github.ref }}
-      - uses: montudor/action-zip@v1
+      - name: Zip lambda package
+        uses: montudor/action-zip@v1
         with:
           args: zip -qq -r ${{ github.sha }}.zip lambda-package
       - name: Execute CloudFormation deployment infrastructure template
