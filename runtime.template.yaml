@@ -1,0 +1,140 @@
+# This Cloud Formation template is used for runtime infrastructure
+AWSTemplateFormatVersion: 2010-09-09
+Description: Code and Coffee Service
+Parameters:
+  DeployBucketName:
+    Type: String
+    Description: The deploy bucket name.
+  LambdaKey:
+    Type: String
+    Description: The key of the lambda package in the deploy bucket.
+  LambdaRoleArn:
+    Type: String
+    Description: The ARN of the role to use for the lambda function.
+  AcmCertificateArn:
+    Type: String
+    Description: The ARN of the ACM certificate to use for the Cloudfront Distribution.
+  RandomSeed:
+    Type: String
+    Description: A random seed to use for generating unique names.
+Resources:
+  WebResourcesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub code-and-coffee-service-web-resources-${RandomSeed}
+      Tags:
+        - Key: app
+          Value: code-and-coffee-service
+  WebResourcesBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    DeletionPolicy: Delete
+    Properties:
+      Bucket: !Sub code-and-coffee-service-web-resources-${RandomSeed}
+      PolicyDocument:
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: '*'
+            Action: "s3:GetObject"
+            Resource: !Sub arn:aws:s3:::code-and-coffee-service-web-resources-${RandomSeed}/*
+  LambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Tags:
+        - Key: app
+          Value: code-and-coffee-service
+      Code:
+        S3Bucket: !Sub code-and-coffee-service-deploy-${RandomSeed}
+        S3Key: !Ref LambdaKey
+      Handler: lambda-package/index.handler
+      MemorySize: 128
+      Role: !Ref LambdaRoleArn
+      Runtime: nodejs14.x
+      Timeout: 10
+  ApiGatewayHttpApi:
+    Type: "AWS::ApiGatewayV2::Api"
+    Properties:
+      Tags:
+        - Key: app
+          Value: code-and-coffee-service
+      Name: MyHttpApi
+      ProtocolType: HTTP
+      Description: An HTTP API for my Lambda function
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowHeaders:
+          - "*"
+        AllowMethods:
+          - GET
+  ApiGatewayHttpApiIntegration:
+    Type: "AWS::ApiGatewayV2::Integration"
+    Properties:
+      ApiId: !Ref ApiGatewayHttpApi
+      IntegrationType: AWS_PROXY
+      PayloadFormatVersion: "2.0"
+      IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations
+    DependsOn:
+      - ApiGatewayHttpApi
+      - LambdaFunction
+  ApiGatewayHttpApiRoute:
+    Type: "AWS::ApiGatewayV2::Route"
+    Properties:
+      ApiId: !Ref ApiGatewayHttpApi
+      RouteKey: "$default"
+      Target: !Join
+        - /
+        - - integrations
+          - !Ref ApiGatewayHttpApiIntegration
+    DependsOn:
+      - ApiGatewayHttpApiIntegration
+      - ApiGatewayHttpApi
+  CloudFrontDistribution:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      Tags:
+        - Key: app
+          Value: code-and-coffee-service
+      DistributionConfig:
+        Comment: Code and Coffee Service
+        Origins:
+          - DomainName: !Sub "${ApiGatewayHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+            Id: api-gateway
+            CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginProtocolPolicy: https-only
+          - Id: s3-origin
+            DomainName: !GetAtt WebResourcesBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: ""
+        DefaultCacheBehavior:
+          ForwardedValues:
+            QueryString: false
+          TargetOriginId: s3-origin
+          ViewerProtocolPolicy: redirect-to-https
+        Enabled: true
+        HttpVersion: http2
+        ViewerCertificate:
+          AcmCertificateArn: !Ref AcmCertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+        CacheBehaviors:
+          - PathPattern: /api/*
+            TargetOriginId: api-gateway
+            ForwardedValues:
+              QueryString: false
+              Cookies:
+                Forward: none
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods:
+              - GET
+              - HEAD
+              - OPTIONS
+            CachedMethods:
+              - GET
+              - HEAD
+            MinTTL: 300
+            MaxTTL: 360
+    DependsOn:
+      - ApiGatewayHttpApi

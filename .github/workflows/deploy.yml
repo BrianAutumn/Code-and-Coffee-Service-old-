@@ -44,14 +44,12 @@ jobs:
       - uses: montudor/action-zip@v1
         with:
           args: zip -qq -r ${{ github.sha }}.zip lambda-package
-      - name: Create Deploy Bucket
-        run: aws s3 mb s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}
+      - name: Execute CloudFormation deployment infrastructure template
+        run: aws cloudformation deploy --template-file deploy.template.yaml --stack-name code-and-coffee-service-deploy --parameter-overrides RandomSeed=${{ secrets.RANDOM_SEED }}
       - name: Upload lambda package to S3
-        run: aws s3 cp ${{ github.sha }}.zip s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}/${{ github.sha }}.zip
-      - name: Upload deploy.template.yaml to S3
-        run: aws s3 cp deploy.template.yaml s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}/deploy.template.yaml
-      - name: Execute CloudFormation template
-        run: aws cloudformation deploy --template-file master-deploy.template.yaml --stack-name code-and-coffee-service --parameter-overrides DeployBucketName=${{ secrets.S3_DEPLOY_BUCKET_NAME }} LambdaKey=${{ github.sha }}.zip AcmCertificateArn=${{ secrets.ACM_CERTIFICATE_ARN }}
+        run: aws s3 cp ${{ github.sha }}.zip s3://code-and-coffee-service-deploy-${{ secrets.RANDOM_SEED }}/${{ github.sha }}.zip
+      - name: Execute CloudFormation runtime infrastructure template
+        run: aws cloudformation deploy --template-file runtime.template.yaml --stack-name code-and-coffee-service --parameter-overrides DeployBucketName=${{ secrets.S3_DEPLOY_BUCKET_NAME }} LambdaKey=${{ github.sha }}.zip AcmCertificateArn=${{ secrets.ACM_CERTIFICATE_ARN }} RandomSeed=${{ secrets.RANDOM_SEED }} LambdaRoleArn=${{ secrets.LAMBDA_ROLE_ARN }}
       - name: Upload dist to web resources bucket
         run: aws s3 sync dist s3://code-and-coffee-service-web-resources
       - name: Publish SNS topic success
