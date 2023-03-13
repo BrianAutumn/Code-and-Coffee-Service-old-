@@ -7,6 +7,9 @@ Parameters:
   LambdaKey:
     Type: String
     Description: The key of the lambda package in the deploy bucket.
+  AcmCertificateArn:
+    Type: String
+    Description: The ARN of the ACM certificate to use for the Cloudfront Distribution.
 Resources:
   WebResourcesBucket:
     Type: AWS::S3::Bucket
@@ -64,28 +67,32 @@ Resources:
       DistributionConfig:
         Origins:
           - DomainName: !Sub "${ApiGatewayHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
-            Id: apigateway
+            Id: api-gateway
             CustomOriginConfig:
               HTTPPort: 80
               HTTPSPort: 443
               OriginProtocolPolicy: https-only
+          - Id: s3-origin
+            DomainName: !GetAtt WebResourcesBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: ""
         DefaultCacheBehavior:
           ForwardedValues:
             QueryString: false
-          TargetOriginId: apigateway
+          TargetOriginId: s3-origin
           ViewerProtocolPolicy: redirect-to-https
         Enabled: true
         HttpVersion: http2
         ViewerCertificate:
-          AcmCertificateArn: arn:aws:acm:us-east-1:848023796141:certificate/6aeba91c-0828-444e-b09d-ce5e5326c46b
+          AcmCertificateArn: !Ref AcmCertificateArn
           SslSupportMethod: sni-only
         CacheBehaviors:
           - PathPattern: /api/*
-            TargetOriginId: apigateway
+            TargetOriginId: api-gateway
             ForwardedValues:
-              QueryString: true
+              QueryString: false
               Cookies:
-                Forward: all
+                Forward: none
             ViewerProtocolPolicy: redirect-to-https
             AllowedMethods:
               - GET
@@ -95,5 +102,6 @@ Resources:
               - GET
               - HEAD
             MinTTL: 300
+            MaxTTL: 360
     DependsOn:
       - ApiGatewayHttpApi
