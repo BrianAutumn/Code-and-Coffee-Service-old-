@@ -20,7 +20,8 @@ Resources:
     Properties:
       BucketName: !Sub code-and-coffee-service-web-resources-${RandomSeed}
       Tags:
-          app: code-and-coffee-service
+        - Key: app
+          Value: code-and-coffee-service
   WebResourcesBucketPolicy:
     Type: AWS::S3::BucketPolicy
     DeletionPolicy: Delete
