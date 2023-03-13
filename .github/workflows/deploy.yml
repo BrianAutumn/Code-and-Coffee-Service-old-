@@ -47,7 +47,7 @@ jobs:
       - name: Create Deploy Bucket
         run: aws s3 mb s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}
       - name: Upload lambda package to S3
-        run: aws s3 cp ${{ github.sha }}.zip s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}/lambda-package.zip
+        run: aws s3 cp ${{ github.sha }}.zip s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}/${{ github.sha }}.zip
       - name: Upload deploy.template.yaml to S3
         run: aws s3 cp deploy.template.yaml s3://${{ secrets.S3_DEPLOY_BUCKET_NAME }}/deploy.template.yaml
       - name: Execute CloudFormation template
