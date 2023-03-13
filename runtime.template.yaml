@@ -2,9 +2,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Code and Coffee Service
 Parameters:
-  DeployBucketName:
-    Type: String
-    Description: The deploy bucket name.
   LambdaKey:
     Type: String
     Description: The key of the lambda package in the deploy bucket.
@@ -23,8 +20,7 @@ Resources:
     Properties:
       BucketName: !Sub code-and-coffee-service-web-resources-${RandomSeed}
       Tags:
-        - Key: app
-          Value: code-and-coffee-service
+        - app: code-and-coffee-service
   WebResourcesBucketPolicy:
     Type: AWS::S3::BucketPolicy
     DeletionPolicy: Delete
@@ -41,8 +37,7 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       Tags:
-        - Key: app
-          Value: code-and-coffee-service
+        - app: code-and-coffee-service
       Code:
         S3Bucket: !Sub code-and-coffee-service-deploy-${RandomSeed}
         S3Key: !Ref LambdaKey
@@ -55,8 +50,7 @@ Resources:
     Type: "AWS::ApiGatewayV2::Api"
     Properties:
       Tags:
-        - Key: app
-          Value: code-and-coffee-service
+        - app: code-and-coffee-service
       Name: MyHttpApi
       ProtocolType: HTTP
       Description: An HTTP API for my Lambda function
@@ -93,8 +87,7 @@ Resources:
     Type: "AWS::CloudFront::Distribution"
     Properties:
       Tags:
-        - Key: app
-          Value: code-and-coffee-service
+        - app: code-and-coffee-service
       DistributionConfig:
         Comment: Code and Coffee Service
         Origins:
