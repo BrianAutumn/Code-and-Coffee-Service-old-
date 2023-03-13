@@ -15,48 +15,6 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
-      - name: Check for secret RANDOM_SEED
-        run: |
-          if [[ -z "${{ secrets.RANDOM_SEED }}" ]]; then
-            echo "Required secret RANDOM_SEED is missing"
-            exit 1
-          fi
-      - name: Check for secret ACM_CERTIFICATE_ARN
-        run: |
-        if [[ -z "${{ secrets.ACM_CERTIFICATE_ARN }}" ]]; then
-          echo "Required secret ACM_CERTIFICATE_ARN is missing"
-          exit 1
-        fi
-      - name: Check for secret LAMBDA_ROLE_ARN
-        run: |
-          if [[ -z "${{ secrets.LAMBDA_ROLE_ARN }}" ]]; then
-            echo "Required secret LAMBDA_ROLE_ARN is missing"
-            exit 1
-          fi
-      - name: Check for secret AWS_ACCESS_KEY_ID
-        run: |
-          if [[ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ]]; then
-            echo "Required secret AWS_ACCESS_KEY_ID is missing"
-            exit 1
-          fi
-      - name: Check for secret AWS_SECRET_ACCESS_KEY
-        run: |
-          if [[ -z "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ]]; then
-            echo "Required secret AWS_SECRET_ACCESS_KEY is missing"
-            exit 1
-          fi
-      - name: Check for secret AWS_REGION
-        run: |
-          if [[ -z "${{ secrets.AWS_REGION }}" ]]; then
-            echo "Required secret AWS_REGION is missing"
-            exit 1
-          fi
-      - name: Check for secret SNS_ARN
-        run: |
-          if [[ -z "${{ secrets.SNS_ARN }}" ]]; then
-            echo "Required secret SNS_ARN is missing"
-            exit 1
-          fi
       - name: Get current time
         uses: srfrnk/current-time@master
         id: time
