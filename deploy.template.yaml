@@ -18,7 +18,7 @@ Resources:
       Code:
         S3Bucket: !Ref DeployBucketName
         S3Key: !Ref LambdaKey
-      Handler: index.handler
+      Handler: !Sub ${!GetAtt MyLambdaFunction.Arn}/lambda-package/index.handler
       MemorySize: 128
       Role: arn:aws:iam::848023796141:role/code-and-coffee-service-lambda-role
       Runtime: nodejs14.x
