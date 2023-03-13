@@ -38,7 +38,8 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       Tags:
-          app: code-and-coffee-service
+        - Key: app
+          Value: code-and-coffee-service
       Code:
         S3Bucket: !Sub code-and-coffee-service-deploy-${RandomSeed}
         S3Key: !Ref LambdaKey
