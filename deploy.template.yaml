@@ -15,6 +15,18 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: code-and-coffee-service-web-resources
+  MyBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref WebResourcesBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "Allow Public access to S3"
+            Effect: "Allow"
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !GetAtt WebResourcesBucket.Arn
   LambdaFunction:
     Type: "AWS::Lambda::Function"
     Properties:
