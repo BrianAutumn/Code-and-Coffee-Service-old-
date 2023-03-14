@@ -63,6 +63,16 @@ Resources:
           - "*"
         AllowMethods:
           - GET
+  ApiGatewayHttpApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref ApiGatewayHttpApi
+      StageName: prod
+      AutoDeploy: true
+      DefaultRouteSettings:
+        DetailedMetricsEnabled: true
+        LoggingLevel: INFO
+        DataTraceEnabled: true
   ApiGatewayHttpApiIntegration:
     Type: "AWS::ApiGatewayV2::Integration"
     Properties:
