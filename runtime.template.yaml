@@ -131,7 +131,5 @@ Resources:
               - GET
               - HEAD
             MinTTL: 300
-            DefaultTTL: 300
-            MaxTTL: 360
     DependsOn:
       - ApiGatewayHttpApi
