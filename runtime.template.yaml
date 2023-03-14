@@ -53,9 +53,9 @@ Resources:
     Properties:
       Tags:
           app: code-and-coffee-service
-      Name: MyHttpApi
+      Name: Code and Coffee Service
       ProtocolType: HTTP
-      Description: An HTTP API for my Lambda function
+      Description: API for the Code and Coffee Service
       CorsConfiguration:
         AllowOrigins:
           - "*"
