@@ -48,7 +48,7 @@ Resources:
       Role: !Ref LambdaRoleArn
       Runtime: nodejs14.x
       Timeout: 10
-  ApiGatewayHttpApi:
+  ApiGatewayApi:
     Type: "AWS::ApiGatewayV2::Api"
     Properties:
       Tags:
@@ -63,34 +63,44 @@ Resources:
           - "*"
         AllowMethods:
           - GET
-  ApiGatewayHttpApiStage:
+  ApiGatewayApiStage:
     Type: AWS::ApiGatewayV2::Stage
     Properties:
-      ApiId: !Ref ApiGatewayHttpApi
+      ApiId: !Ref ApiGatewayApi
       StageName: prod
       AutoDeploy: true
-  ApiGatewayHttpApiIntegration:
+      AccessLogSettings:
+        DestinationArn: !GetAtt ApiGatewayLogGroup.Arn
+        Format: '{"requestTime":"$context.requestTime","requestId":"$context.requestId","httpMethod":"$context.httpMethod","path":"$context.path","routeKey":"$context.routeKey"}'
+    DependsOn:
+      - ApiGatewayApi
+  ApiGatewayApiIntegration:
     Type: "AWS::ApiGatewayV2::Integration"
     Properties:
-      ApiId: !Ref ApiGatewayHttpApi
+      ApiId: !Ref ApiGatewayApi
       IntegrationType: AWS_PROXY
       PayloadFormatVersion: "2.0"
       IntegrationUri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunction.Arn}/invocations
     DependsOn:
-      - ApiGatewayHttpApi
+      - ApiGatewayApi
       - LambdaFunction
-  ApiGatewayHttpApiRoute:
+  ApiGatewayApiRoute:
     Type: "AWS::ApiGatewayV2::Route"
     Properties:
-      ApiId: !Ref ApiGatewayHttpApi
+      ApiId: !Ref ApiGatewayApi
       RouteKey: "$default"
       Target: !Join
         - /
         - - integrations
-          - !Ref ApiGatewayHttpApiIntegration
+          - !Ref ApiGatewayApiIntegration
     DependsOn:
-      - ApiGatewayHttpApiIntegration
-      - ApiGatewayHttpApi
+      - ApiGatewayApiIntegration
+      - ApiGatewayApi
+  ApiGatewayLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/apigateway/code-and-coffee-service
+      RetentionInDays: 14
   CloudFrontDistribution:
     Type: "AWS::CloudFront::Distribution"
     Properties:
