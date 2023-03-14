@@ -110,7 +110,7 @@ Resources:
       DistributionConfig:
         Comment: Code and Coffee Service
         Origins:
-          - DomainName: !Sub "${ApiGatewayHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+          - DomainName: !Sub "${ApiGatewayApi}.execute-api.${AWS::Region}.amazonaws.com"
             Id: api-gateway
             CustomOriginConfig:
               HTTPPort: 80
@@ -148,4 +148,4 @@ Resources:
               - HEAD
             MinTTL: 300
     DependsOn:
-      - ApiGatewayHttpApi
+      - ApiGatewayApi
