@@ -1,10 +1,9 @@
-import {APIGatewayEventRequestContextV2, APIGatewayProxyEventV2, APIGatewayProxyResultV2} from "aws-lambda";
+import {APIGatewayProxyEventV2, APIGatewayProxyResultV2} from "aws-lambda";
 
 export async function handler(
-  event: APIGatewayProxyEventV2,
-  context: APIGatewayEventRequestContextV2
+  event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> {
-  const path = context.http.path
+  const path = event.requestContext.http.path
   if(path !== '/prod/api/test') {
     return {
       statusCode: 404,
