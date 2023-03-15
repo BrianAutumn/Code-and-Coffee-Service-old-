@@ -53,6 +53,13 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/code-and-coffee-service-${RandomSeed}
       RetentionInDays: 14
+  LambdaFunctionPermissionApiGateway:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !Ref LambdaFunction
+      Principal: "apigateway.amazonaws.com"
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ApiGatewayApiIntegration}/*/$default
   ApiGatewayApi:
     Type: "AWS::ApiGatewayV2::Api"
     Properties:
