@@ -4,6 +4,7 @@ export async function handler(
   event: APIGatewayEvent
 ): Promise<APIGatewayProxyResult> {
   console.log('path:' + event.path)
+  console.log('event:' + JSON.stringify(event))
   if(event.path !== '/api/test') {
     return {
       statusCode: 404,
