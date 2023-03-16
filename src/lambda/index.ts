@@ -1,13 +1,15 @@
-import {APIGatewayProxyEventV2, APIGatewayProxyResultV2} from "aws-lambda";
+import {APIGatewayProxyEventV2} from "aws-lambda";
+import {APIGatewayProxyStructuredResultV2} from "aws-lambda/trigger/api-gateway-proxy";
+import {getEvents} from "./service/calendar.service";
 
 export async function handler(
   event: APIGatewayProxyEventV2
-): Promise<APIGatewayProxyResultV2> {
+): Promise<APIGatewayProxyStructuredResultV2> {
   const path = event.requestContext.http.path
-  if(path !== '/prod/api/test') {
+  if(path == '/prod/api/events') {
     return {
-      statusCode: 404,
-      body: 'Not found  :(',
+      statusCode: 200,
+      body: JSON.stringify(getEvents()),
       headers: {
         "Content-Type": "application/json",
       },
@@ -15,8 +17,8 @@ export async function handler(
   }
 
   return {
-    statusCode: 200,
-    body: JSON.stringify({test:'value'}),
+    statusCode: 404,
+    body: 'Not found',
     headers: {
       "Content-Type": "application/json",
     },
