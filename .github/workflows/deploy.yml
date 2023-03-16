@@ -41,7 +41,6 @@ jobs:
           BUILD_DATE: ${{ steps.time.outputs.formattedTime }}
           SHA: ${{ github.sha }}
           REF: ${{ github.ref }}
-      - name: Create lambda package directory
       - name: Copy node_modules to package
         run: cp -r node_modules lambda-package/node_modules
       - name: Zip lambda package
