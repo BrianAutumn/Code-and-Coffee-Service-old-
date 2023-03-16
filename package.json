@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p src/lambda/tsconfig.json -outDir lambda-package &&   && vite build",
+    "build": "tsc -p src/lambda/tsconfig.json -outDir lambda-package && vite build",
     "preview": "vite preview",
     "format": "npx prettier --write ."
   },
