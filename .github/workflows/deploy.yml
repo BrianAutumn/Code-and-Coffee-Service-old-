@@ -28,8 +28,6 @@ jobs:
           node-version: 14.x
       - name: Get dependencies
         run: npm ci
-      - name: Build
-        run: npm run build
       - name: Replace tokens
         uses: cschleiden/replace-tokens@v1
         with:
@@ -41,6 +39,8 @@ jobs:
           BUILD_DATE: ${{ steps.time.outputs.formattedTime }}
           SHA: ${{ github.sha }}
           REF: ${{ github.ref }}
+      - name: Build
+        run: npm run build
       - name: Zip lambda package
         uses: montudor/action-zip@v1
         with:
