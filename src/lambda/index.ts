@@ -1,7 +1,7 @@
 import {APIGatewayProxyEventV2} from "aws-lambda";
 import {APIGatewayProxyStructuredResultV2} from "aws-lambda/trigger/api-gateway-proxy";
 import {getEvents} from "./service/calendar.service";
-import {MeetupEvent} from "./dao/Meetup.dao";
+import {MeetupEvent} from "./dao/meetup.dao";
 
 export type EventsResponse = Array<MeetupEvent>
 

@@ -1,4 +1,4 @@
-import {getMeetupEvents} from "../../../src/lambda/dao/Meetup.dao";
+import {getMeetupEvents} from "../../../src/lambda/dao/meetup.dao";
 
 describe("Meetup DAO", () => {
   it("getMeetupEvents()", async () => {
