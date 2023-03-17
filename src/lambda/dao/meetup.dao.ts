@@ -18,7 +18,8 @@ export type MeetupEvent = {
     name: string,
     city: string,
     state: string
-  }
+  },
+  description: string
 }
 
 export async function getMeetupEvents(eventIds: Array<string>): Promise<Array<MeetupEvent>> {
@@ -38,7 +39,7 @@ export async function getMeetupEvents(eventIds: Array<string>): Promise<Array<Me
   return result
 }
 
-const eventFragment = 'fragment eventFragment on Event { eventUrl title going imageUrl venue {name address city state} dateTime group { name city state}}'
+const eventFragment = 'fragment eventFragment on Event { eventUrl title description going imageUrl venue {name address city state} dateTime group { name city state}}'
 
 function formQuery(eventIds: Array<string>): string {
   let newQuery = "query {"

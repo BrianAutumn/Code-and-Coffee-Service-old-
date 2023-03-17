@@ -3,15 +3,11 @@
  */
 class CoffeeEvent extends HTMLElement {
   static get observedAttributes() {
-    return ["title", "description", "start"];
+    return ["title", "start"];
   }
 
   private readonly titleElement;
   private readonly startElement;
-
-  private meetupUrl: undefined | string;
-  private meetupEventId: undefined | string;
-  private meetupGroup: undefined | string;
 
   constructor() {
     super();
@@ -95,11 +91,6 @@ class CoffeeEvent extends HTMLElement {
     this.startElement = this.shadowRoot?.querySelector(
       "._event-start"
     ) as HTMLParagraphElement;
-    this.shadowRoot
-      ?.querySelector("._event-meetup-logo")
-      ?.addEventListener("click", () => {
-        window.open(this.meetupUrl, "_blank");
-      });
     this.updateStartElement();
     this.updateTitleElement();
   }
@@ -133,19 +124,6 @@ class CoffeeEvent extends HTMLElement {
       switch (name) {
         case "title":
           this.updateTitleElement();
-          break;
-        case "description":
-          let match = newValue.match(/https:\/\/www.meetup.com\/.*\//g);
-          if (match) {
-            this.meetupUrl = match[0];
-            this.meetupGroup = this.meetupUrl.match(
-              /(?<=https:\/\/www.meetup.com\/).*(?=\/events)/g
-            )?.[0];
-            this.meetupEventId = this.meetupUrl.match(
-              /(?<=\/events\/).*(?=\/)/g
-            )?.[0];
-            console.log(this.meetupUrl, this.meetupGroup, this.meetupEventId);
-          }
           break;
         case "start":
           this.updateStartElement();

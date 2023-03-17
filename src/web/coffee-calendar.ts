@@ -1,5 +1,5 @@
-import { getCalendarEvents } from "./GoogleCalendar.dao.js";
-import "./CoffeeEvent.js";
+import "./coffee-event.js";
+import {getEvents} from "./coffee.dao";
 
 /**
  * A web component that displays a list of events. It accepts an api key and Calendar ID as attributes.
@@ -47,19 +47,11 @@ class CoffeeCalendar extends HTMLElement {
     this.shadowRoot?.appendChild(template.content.cloneNode(true));
     this.calendarElement.classList.add("_calendar");
     this.shadowRoot?.appendChild(this.calendarElement);
-    if (!this.apiKey) {
-      throw "Missing API Key";
-    }
-    if (!this.calendarId) {
-      throw "Missing Calendar ID";
-    }
-    getCalendarEvents(this.apiKey, this.calendarId).then((events) => {
+    getEvents().then((events) => {
       for (let event of events) {
         const coffeeEvent = document.createElement("coffee-event");
-        console.log(event.summary);
-        coffeeEvent.setAttribute("title", event.summary);
-        coffeeEvent.setAttribute("description", event.description);
-        coffeeEvent.setAttribute("start", event.start.dateTime);
+        coffeeEvent.setAttribute("title", event.title);
+        coffeeEvent.setAttribute("start", event.dateTime);
         this.calendarElement.appendChild(coffeeEvent);
       }
     });
