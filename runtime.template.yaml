@@ -158,6 +158,8 @@ Resources:
             CachedMethods:
               - GET
               - HEAD
-            MinTTL: 300
+            MinTTL: 200
+            defaultTTL: 250
+            MaxTTL: 300
     DependsOn:
       - ApiGatewayApi
