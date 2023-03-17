@@ -8,6 +8,21 @@ export type EventsResponse = Array<MeetupEvent>
 export async function handler(
   event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyStructuredResultV2> {
+  try {
+    return await handleRequest(event);
+  }catch (e){
+    console.error(e);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({message: 'Internal server error', requestId: event.requestContext.requestId}),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+  }
+}
+
+async function handleRequest(event: APIGatewayProxyEventV2): Promise<APIGatewayProxyStructuredResultV2>{
   const path = event.requestContext.http.path
   if(path == '/prod/api/events') {
     return {
@@ -21,7 +36,7 @@ export async function handler(
 
   return {
     statusCode: 404,
-    body: 'Not found',
+    body: JSON.stringify({message: 'Not found', requestId: event.requestContext.requestId}),
     headers: {
       "Content-Type": "application/json",
     },
