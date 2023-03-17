@@ -137,6 +137,7 @@ Resources:
             QueryString: false
           TargetOriginId: s3-origin
           ViewerProtocolPolicy: redirect-to-https
+          CachePolicyId: !Ref CloudFrontCachePolicy
         Enabled: true
         HttpVersion: http2
         ViewerCertificate:
@@ -146,6 +147,7 @@ Resources:
         CacheBehaviors:
           - PathPattern: /api/*
             TargetOriginId: api-gateway
+            CachePolicyId: !Ref CloudFrontCachePolicy
             ForwardedValues:
               QueryString: false
               Cookies:
@@ -158,8 +160,14 @@ Resources:
             CachedMethods:
               - GET
               - HEAD
-            MinTTL: 200
-            defaultTTL: 250
-            MaxTTL: 300
+
     DependsOn:
       - ApiGatewayApi
+  CloudFrontCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        MinTTL: 300
+        DefaultTTL: 300
+        MaxTTL: 360
+        Name: Code and Coffee Service Cache Policy
