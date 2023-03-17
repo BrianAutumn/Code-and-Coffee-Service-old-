@@ -171,3 +171,12 @@ Resources:
         DefaultTTL: 300
         MaxTTL: 360
         Name: Code and Coffee Service Cache Policy
+        ParametersInCacheKeyAndForwardedToOrigin:
+            CookiesConfig:
+                CookieBehavior: none
+            EnableAcceptEncodingBrotli: true
+            EnableAcceptEncodingGzip: true
+            HeadersConfig:
+                HeaderBehavior: none
+            QueryStringsConfig:
+                QueryStringBehavior: none
