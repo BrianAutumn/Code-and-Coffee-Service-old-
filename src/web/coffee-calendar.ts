@@ -50,8 +50,7 @@ class CoffeeCalendar extends HTMLElement {
     getEvents().then((events) => {
       for (let event of events) {
         const coffeeEvent = document.createElement("coffee-event");
-        coffeeEvent.setAttribute("title", event.title);
-        coffeeEvent.setAttribute("start", event.dateTime);
+        coffeeEvent.setAttribute("event", JSON.stringify(event));
         this.calendarElement.appendChild(coffeeEvent);
       }
     });

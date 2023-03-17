@@ -1,13 +1,16 @@
+import {MeetupEvent} from "../lambda/dao/meetup.dao";
+
 /**
  *  A web component that displays an event. It accepts the title of the event as an attribute
  */
 class CoffeeEvent extends HTMLElement {
   static get observedAttributes() {
-    return ["title", "start"];
+    return ["event"];
   }
 
   private readonly titleElement;
   private readonly startElement;
+  private readonly attendeeElement;
 
   constructor() {
     super();
@@ -75,6 +78,7 @@ class CoffeeEvent extends HTMLElement {
         <div class="_event-main">
           <h3 class="_event-title"></h3>
           <p class="_event-start"></p>
+          <p class="_event-attendee"></p>
         </div>
         <div class="_event-spacer"></div>
         <div class="_event-logo-holder">
@@ -91,16 +95,18 @@ class CoffeeEvent extends HTMLElement {
     this.startElement = this.shadowRoot?.querySelector(
       "._event-start"
     ) as HTMLParagraphElement;
-    this.updateStartElement();
-    this.updateTitleElement();
+    this.attendeeElement = this.shadowRoot?.querySelector(
+      "._event-attendee"
+    ) as HTMLParagraphElement;
+    this.updateEvent();
   }
 
-  updateTitleElement(): void {
-    this.titleElement.innerText = this.getAttribute("title") || "";
-  }
+  updateEvent(): void {
+    const event = JSON.parse(this.getAttribute("event") || "{}") as MeetupEvent;
 
-  updateStartElement(): void {
-    const date = new Date(this.getAttribute("start") || "");
+    this.titleElement.innerText = event.title
+
+    const date = new Date(event.dateTime);
     const day = date.toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",
@@ -113,6 +119,7 @@ class CoffeeEvent extends HTMLElement {
     if (this.startElement) {
       this.startElement.innerText = `${day} at ${time}`;
     }
+    this.attendeeElement.innerText = `${event.going} attendees`
   }
 
   attributeChangedCallback(
@@ -120,16 +127,7 @@ class CoffeeEvent extends HTMLElement {
     oldValue: string,
     newValue: string
   ): void {
-    if (oldValue !== newValue) {
-      switch (name) {
-        case "title":
-          this.updateTitleElement();
-          break;
-        case "start":
-          this.updateStartElement();
-          break;
-      }
-    }
+    this.updateEvent();
   }
 }
 
