@@ -1,4 +1,4 @@
-import axios from "axios";
+import {request} from "../util/request.util";
 
 //See https://www.meetup.com/api/schema/#p03-objects-section for Meetup API details.
 
@@ -23,7 +23,9 @@ export type MeetupEvent = {
 
 export async function getMeetupEvents(eventIds: Array<string>): Promise<Array<MeetupEvent>> {
   const finalQuery = formQuery(eventIds);
-  const response = await axios('https://api.meetup.com/gql', {
+  const response = await request({
+    name: 'Meetup Event',
+    url:'https://api.meetup.com/gql',
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     data: {query:finalQuery}

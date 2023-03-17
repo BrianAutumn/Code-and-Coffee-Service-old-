@@ -1,5 +1,5 @@
-import axios from "axios";
-import {AppConf} from "../AppConf";
+import {AppConf} from "../app-conf";
+import {request} from "../util/request.util";
 
 export type GoogleCalendar = {
   kind: string,
@@ -47,15 +47,19 @@ export type GoogleCalendarEvent = {
   sequence: number,
 }
 
-export async function getCalendarEvents():Promise<GoogleCalendar>{
-  let response = await axios(`https://www.googleapis.com/calendar/v3/calendars/${AppConf.googleCalendarId}/events?key=${AppConf.googleCalendarApiKey}`, {method: 'GET'})
+export async function getCalendarEvents(): Promise<GoogleCalendar> {
+  let response = await request({
+    method: 'GET',
+    url: `https://www.googleapis.com/calendar/v3/calendars/${AppConf.googleCalendarId}/events?key=${AppConf.googleCalendarApiKey}`,
+    name: 'Google Calendar'
+  })
   let data = await response.data as GoogleCalendar
   sortEvents(data.items)
   return data;
 }
 
-function sortEvents(events:Array<GoogleCalendarEvent>){
-  events.sort((a,b) => {
+function sortEvents(events: Array<GoogleCalendarEvent>) {
+  events.sort((a, b) => {
     return new Date(a.start.dateTime).valueOf() - new Date(b.start.dateTime).valueOf();
   })
 }

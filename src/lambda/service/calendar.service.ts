@@ -1,5 +1,5 @@
-import {getCalendarEvents} from "../dao/GoogleCalendar.dao";
-import {getMeetupEvents, MeetupEvent} from "../dao/Meetup.dao";
+import {getCalendarEvents} from "../dao/google-calendar.dao";
+import {getMeetupEvents, MeetupEvent} from "../dao/meetup.dao";
 
 export async function getEvents():Promise<Array<MeetupEvent>>{
   const googleCalendarEvents = await getCalendarEvents();
