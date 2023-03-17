@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 
 
 export type RequestOptions = AxiosRequestConfig & {
@@ -11,7 +11,16 @@ export async function request(options:RequestOptions):Promise<AxiosResponse>{
     console.info(`Request ${options.name} succeeded with response: ${JSON.stringify(response)}`);
     return response;
   } catch (e) {
-    console.error(`Request ${options.name} failed with error: ${JSON.stringify(e)}`);
+    const axiosError = e as AxiosError;
+    if(axiosError.response){
+      console.error(`Request ${options.name} failed with response: ${JSON.stringify({
+        status: axiosError.response.status,
+        statusText: axiosError.response.statusText,
+        headers: axiosError.response.headers,
+        data: axiosError.response.data
+      })
+      }`);
+    }
     throw e;
   }
 }

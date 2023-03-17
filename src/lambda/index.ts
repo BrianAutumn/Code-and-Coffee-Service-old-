@@ -11,7 +11,7 @@ export async function handler(
   try {
     return await handleRequest(event);
   }catch (e){
-    console.error(e);
+    console.error(`Internal server error: ${e}`);
     return {
       statusCode: 500,
       body: JSON.stringify({message: 'Internal server error', requestId: event.requestContext.requestId}),

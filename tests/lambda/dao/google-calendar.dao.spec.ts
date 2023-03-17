@@ -1,4 +1,4 @@
-import { getCalendarEvents } from "../../../src/lambda/dao/GoogleCalendar.dao";
+import { getCalendarEvents } from "../../../src/lambda/dao/google-calendar.dao";
 
 describe("Google Calendar DAO", () => {
   it("getCalendarEvents()", async () => {
