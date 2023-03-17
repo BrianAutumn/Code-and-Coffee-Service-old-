@@ -2,6 +2,7 @@ import {APIGatewayProxyEventV2} from "aws-lambda";
 import {APIGatewayProxyStructuredResultV2} from "aws-lambda/trigger/api-gateway-proxy";
 import {getEvents} from "./service/calendar.service";
 import {MeetupEvent} from "./dao/meetup.dao";
+import {AppConf} from "./app-conf";
 
 export type EventsResponse = Array<MeetupEvent>
 
@@ -11,6 +12,7 @@ export async function handler(
   try {
     return await handleRequest(event);
   }catch (e){
+    console.log(JSON.stringify(AppConf))
     console.error(`Internal server error: ${e}`);
     return {
       statusCode: 500,
