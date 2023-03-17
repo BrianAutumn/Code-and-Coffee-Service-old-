@@ -79,7 +79,7 @@ class CoffeeEvent extends HTMLElement {
         <div class="_event-spacer"></div>
         <div class="_event-logo-holder">
           <div class="_event-logo-halo">
-            <img src="./Meetup_Logo.png" class="_event-meetup-logo" alt="Meetup Logo">
+            <img src="https://d3ldp4mijqfzeg.cloudfront.net/Meetup_Logo.png" class="_event-meetup-logo" alt="Meetup Logo">
           </div>
         </div>
       </div>
