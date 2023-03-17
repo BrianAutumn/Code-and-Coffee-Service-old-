@@ -9,7 +9,7 @@ export async function handler(
   if(path == '/prod/api/events') {
     return {
       statusCode: 200,
-      body: JSON.stringify(getEvents()),
+      body: JSON.stringify(await getEvents()),
       headers: {
         "Content-Type": "application/json",
       },
