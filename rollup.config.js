@@ -7,9 +7,8 @@ import json from '@rollup/plugin-json'
 export default {
   input: 'src/lambda/index.ts',
   output: {
-    file: 'lambda-package/index.js',
-    format: 'cjs',
-    sourcemap: true
+    file: 'lambda-package/bundle.js',
+    format: 'cjs'
   },
   plugins: [
     typescript(),
