@@ -43,7 +43,7 @@ Resources:
       Code:
         S3Bucket: !Sub code-and-coffee-service-deploy-${RandomSeed}
         S3Key: !Ref LambdaKey
-      Handler: bundle.js
+      Handler: !Ref LambdaKey
       MemorySize: 128
       Role: !Ref LambdaRoleArn
       Runtime: nodejs14.x
