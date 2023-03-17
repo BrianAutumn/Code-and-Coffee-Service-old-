@@ -8,7 +8,12 @@ export async function request(options:RequestOptions):Promise<AxiosResponse>{
   console.info(`Requesting ${options.name} with options: ${JSON.stringify(options)}`);
   try{
     const response = await axios(options)
-    console.info(`Request ${options.name} succeeded with response: ${JSON.stringify(response)}`);
+    console.info(`Request ${options.name} succeeded with response: ${JSON.stringify({
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+      data: response.data
+    })}`);
     return response;
   } catch (e) {
     const axiosError = e as AxiosError;
