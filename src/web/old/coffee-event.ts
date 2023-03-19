@@ -1,4 +1,4 @@
-import {MeetupEvent} from "../lambda/dao/meetup.dao";
+import {MeetupEvent} from "../../lambda/dao/meetup.dao";
 
 /**
  *  A web component that displays an event. It accepts the title of the event as an attribute

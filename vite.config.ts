@@ -8,9 +8,9 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, "src/web/coffee-calendar.ts"),
-      name: "CoffeeCalendar",
-      fileName: "coffee-calendar",
+      entry: resolve(__dirname, "src/web/index.ts"),
+      name:'Index',
+      fileName: "index",
     },
   },
 });

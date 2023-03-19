@@ -1,5 +1,5 @@
-import "./coffee-event.js";
-import {getEvents} from "./coffee.dao";
+import "./coffee-event";
+import {getEvents} from "../coffee.dao";
 
 /**
  * A web component that displays a list of events. It accepts an api key and Calendar ID as attributes.
