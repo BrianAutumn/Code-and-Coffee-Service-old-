@@ -170,7 +170,7 @@ Resources:
         MinTTL: 300
         DefaultTTL: 300
         MaxTTL: 360
-        Name: code-and-coffee-service-cache-policy
+        Name: "code-and-coffee-service-cache-policy"
         ParametersInCacheKeyAndForwardedToOrigin:
             CookiesConfig:
                 CookieBehavior: none
