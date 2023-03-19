@@ -3,6 +3,7 @@ import {request} from "../util/request.util";
 //See https://www.meetup.com/api/schema/#p03-objects-section for Meetup API details.
 
 export type MeetupEvent = {
+  id: string,
   eventUrl: string,
   title: string,
   going: number,
@@ -15,6 +16,7 @@ export type MeetupEvent = {
   },
   dateTime: string,
   group: {
+    id:string,
     name: string,
     city: string,
     state: string
@@ -39,7 +41,7 @@ export async function getMeetupEvents(eventIds: Array<string>): Promise<Array<Me
   return result
 }
 
-const eventFragment = 'fragment eventFragment on Event { eventUrl title description going imageUrl venue {name address city state} dateTime group { name city state}}'
+const eventFragment = 'fragment eventFragment on Event { id eventUrl title description going imageUrl venue { name address city state} dateTime group { id name city state}}'
 
 function formQuery(eventIds: Array<string>): string {
   let newQuery = "query {"
