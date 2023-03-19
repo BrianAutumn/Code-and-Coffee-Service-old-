@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ReactNode, useState} from "react";
 import styled from "styled-components";
 import {People24Filled} from '@fluentui/react-icons'
 import {Share24Filled} from '@fluentui/react-icons'
@@ -16,7 +16,7 @@ const EventContainer = styled.div`
   justify-content: space-between;
   flex-direction: row;
   min-height: 150px;
-  gap: 10px;
+  gap: 15px;
   border-bottom: 1px solid #DCDCDC;
   padding-bottom:15px;
   padding-top:15px;
@@ -46,11 +46,12 @@ const DateMonth = styled.p`
 const IconContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 60px;
 `
 
 const CityIcon = styled.img`
-  width: 58px;
-  height: 58px;
+  box-shadow: 0 0 16px 16px white inset;
+  border-radius: 2px;
 `
 
 const InfoContainer = styled.div`
@@ -86,6 +87,22 @@ const RsvpContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: end;
+`
+
+const CityContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`
+
+const CityLabel = styled.p`
+  font-weight: 400;
+  margin: 0;
+  font-size: 12px;
+  color: #6C6C6C;
 `
 
 const AttendeeContainer = styled.div`
@@ -125,6 +142,12 @@ const HourFormatter = new Intl.DateTimeFormat('default',{hour:'numeric',hour12:t
 const EVENT_DESCRIPTION_LENGTH = 125;
 
 export function CoffeeEvent({event}:{event:MeetupEvent}) {
+  const [iconImage, setIconImage] = useState(undefined as undefined | ReactNode)
+  fetch(`/city-icons/${event.group.id}.png`).then(response => {
+    if (response.ok) {
+      setIconImage(<CityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
+    }
+  })
   const date = new Date(event.dateTime);
   const eventDateString = `${WeekdayFormatter.format(date)}, ${MonthLongFormatter.format(date)} ${DayFormatter.format(date)} at ${HourFormatter.format(date)}`
   const descriptionString = event.description.length > EVENT_DESCRIPTION_LENGTH ? event.description.substring(0,EVENT_DESCRIPTION_LENGTH) + ' ...' : event.description;
@@ -135,7 +158,7 @@ export function CoffeeEvent({event}:{event:MeetupEvent}) {
         <DateMonth>{MonthShortFormatter.format(date)}</DateMonth>
       </DateContainer>
       <IconContainer>
-        <CityIcon src="/icon.png" alt="icon"/>
+        {iconImage}
       </IconContainer>
       <InfoContainer>
         <DateInfo>{eventDateString}</DateInfo>
@@ -145,6 +168,9 @@ export function CoffeeEvent({event}:{event:MeetupEvent}) {
       <Spacer/>
       <RsvpContainer>
         <EventImage src={event.imageUrl} alt="rsvp"/>
+        <CityContainer>
+          <CityLabel>{event.venue.city}, {event.venue.state.toUpperCase()}</CityLabel>
+        </CityContainer>
         <AttendeeContainer>
           <PeopleIcon />
           <AttendeeCount>{event.going}</AttendeeCount>
