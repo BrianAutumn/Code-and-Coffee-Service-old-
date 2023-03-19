@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import {People24Filled} from '@fluentui/react-icons'
 import {Share24Filled} from '@fluentui/react-icons'
+import {MeetupEvent} from "../lambda/dao/meetup.dao";
+import {CoffeeButton} from "./components";
 
 const PeopleIcon = People24Filled;
 const ShareIcon = Share24Filled;
@@ -114,47 +116,41 @@ const EventImage = styled.img`
   border-radius: 5px;
 `
 
-const RsvpButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background: #D4B9FF;
-  border: 1px solid #000000;
-  border-radius: 5px;
-  font-weight: 700;
-  font-size: 15px;
-  padding: 8px 16px;
-`
+const MonthShortFormatter = new Intl.DateTimeFormat('default',{month:'short'})
+const MonthLongFormatter = new Intl.DateTimeFormat('default',{month:'long'})
+const WeekdayFormatter = new Intl.DateTimeFormat('default',{weekday:'long'})
+const DayFormatter = new Intl.DateTimeFormat('default',{day:'numeric'})
+const HourFormatter = new Intl.DateTimeFormat('default',{hour:'numeric',hour12:true,minute:'2-digit'})
 
-export function CoffeeEvent(){
+const EVENT_DESCRIPTION_LENGTH = 125;
+
+export function CoffeeEvent({event}:{event:MeetupEvent}) {
+  const date = new Date(event.dateTime);
+  const eventDateString = `${WeekdayFormatter.format(date)}, ${MonthLongFormatter.format(date)} ${DayFormatter.format(date)} at ${HourFormatter.format(date)}`
+  const descriptionString = event.description.length > EVENT_DESCRIPTION_LENGTH ? event.description.substring(0,EVENT_DESCRIPTION_LENGTH) + ' ...' : event.description;
   return (
     <EventContainer>
       <DateContainer>
-        <DateNumber>5</DateNumber>
-        <DateMonth>MAR</DateMonth>
+        <DateNumber>{DayFormatter.format(date)}</DateNumber>
+        <DateMonth>{MonthShortFormatter.format(date)}</DateMonth>
       </DateContainer>
       <IconContainer>
         <CityIcon src="/icon.png" alt="icon"/>
       </IconContainer>
       <InfoContainer>
-        <DateInfo>Sunday, March 12 at 1:00 PM</DateInfo>
-        <EventInfo>St. Louis | Code and Coffee</EventInfo>
-        <DescriptionInfo>Boston Code and Coffee features, Brian Towne, who will lead a community discussion around ChatGPT ... (read more) </DescriptionInfo>
+        <DateInfo>{eventDateString}</DateInfo>
+        <EventInfo>{event.title}</EventInfo>
+        <DescriptionInfo>{descriptionString}</DescriptionInfo>
       </InfoContainer>
       <Spacer/>
       <RsvpContainer>
-        <EventImage src="/cover.png" alt="rsvp"/>
+        <EventImage src={event.imageUrl} alt="rsvp"/>
         <AttendeeContainer>
           <PeopleIcon />
-          <AttendeeCount>46</AttendeeCount>
+          <AttendeeCount>{event.going}</AttendeeCount>
           <AttendeeLabel>attendees</AttendeeLabel>
         </AttendeeContainer>
-        <RsvpButton>
-          RSVP
-          <ShareIcon />
-        </RsvpButton>
+        <CoffeeButton text={'RSVP'} icon={<ShareIcon/>}/>
       </RsvpContainer>
     </EventContainer>
   )
