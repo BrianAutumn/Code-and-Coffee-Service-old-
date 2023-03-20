@@ -1,6 +1,4 @@
-import React from "react";
 import {CoffeeCalendar} from "./coffee-calendar";
-import {createReactWebComponent} from "./wc.util";
+import {registerReactWebComponent} from "./wc.util";
 
-
-customElements.define('coffee-calendar', createReactWebComponent(<CoffeeCalendar  height={500}/>));
+registerReactWebComponent({ name: 'coffee-calendar', attributes: ['height'], Component: CoffeeCalendar })

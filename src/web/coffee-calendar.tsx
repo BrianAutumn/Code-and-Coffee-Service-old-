@@ -3,7 +3,6 @@ import {CoffeeEvent} from "./coffee-event";
 import styled from "styled-components";
 import {CalendarLtr32Regular} from "@fluentui/react-icons";
 import {getEvents} from "./coffee.dao";
-import {CoffeeButton} from "./components";
 
 const CalendarContainer = styled.div`
   display: flex;
@@ -20,6 +19,34 @@ const EventTitle = styled.h1`
   font-weight: 700;
   font-size: 36px;
   margin: 0 0 10px 0;
+`
+
+const CoffeeButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background: #D4B9FF;
+  gap: 10px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 16px 80px;
+  transition: background .2s, box-shadow .2s;
+  margin-bottom: 15px;
+  margin-top: 15px;
+
+  :hover {
+    background: #dbc4ff;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    cursor: pointer;
+  }
+
+  :active {
+    background: #a063ff;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+  }
 `
 
 const EventHolder = styled.div`
@@ -61,17 +88,21 @@ const EventHolder = styled.div`
   }
 `
 
-export function CoffeeCalendar({height}:{height:number}) {
+export function CoffeeCalendar({height}: { height: number }) {
   const [coffeeEvents, setCoffeeEvents] = useState([] as Array<JSX.Element>);
+  function moreEventsAction() {
+    window.open('https://calendar.google.com/calendar/u/0/r?cid=fs1sc4j8ff3gpgkknc8gvg9c6lljko23@import.calendar.google.com')
+  }
   getEvents().then((events) => {
     const newCoffeeEvents = [] as Array<JSX.Element>
-    let i = 0;
-    for(const event of events) {
-      newCoffeeEvents.push(<CoffeeEvent event={event} key={i}/>);
-      i++
+    for (const event of events) {
+      newCoffeeEvents.push(<CoffeeEvent event={event} key={event.id}/>);
     }
     newCoffeeEvents.push(
-      <CoffeeButton text={"More Events"} icon={<CalendarLtr32Regular/>} size={'large'} key={i}/>
+      <CoffeeButton key={'more-events'} onClick={moreEventsAction}>
+        Subscribe to Calendar
+        <CalendarLtr32Regular/>
+      </CoffeeButton>
     )
     setCoffeeEvents(newCoffeeEvents)
   })

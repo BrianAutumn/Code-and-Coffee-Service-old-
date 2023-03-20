@@ -3,7 +3,6 @@ import styled from "styled-components";
 import {People24Filled} from '@fluentui/react-icons'
 import {Share24Filled} from '@fluentui/react-icons'
 import {MeetupEvent} from "../lambda/dao/meetup.dao";
-import {CoffeeButton} from "./components";
 
 const PeopleIcon = People24Filled;
 const ShareIcon = Share24Filled;
@@ -133,6 +132,32 @@ const EventImage = styled.img`
   border-radius: 5px;
 `
 
+const CoffeeButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background: #D4B9FF;
+  gap: 10px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 8px 16px;
+  transition: background .2s, box-shadow .2s;
+
+  :hover {
+    background: #dbc4ff;
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+    cursor: pointer;
+  }
+
+  :active {
+    background: #a063ff;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+  }
+`
+
 const MonthShortFormatter = new Intl.DateTimeFormat('default',{month:'short'})
 const MonthLongFormatter = new Intl.DateTimeFormat('default',{month:'long'})
 const WeekdayFormatter = new Intl.DateTimeFormat('default',{weekday:'long'})
@@ -143,6 +168,10 @@ const EVENT_DESCRIPTION_LENGTH = 125;
 
 export function CoffeeEvent({event}:{event:MeetupEvent}) {
   const [iconImage, setIconImage] = useState(undefined as undefined | ReactNode)
+  function rsvpAction(){
+    window.open(event.eventUrl, '_blank');
+  }
+
   fetch(`/city-icons/${event.group.id}.png`).then(response => {
     if (response.ok) {
       setIconImage(<CityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
@@ -176,7 +205,10 @@ export function CoffeeEvent({event}:{event:MeetupEvent}) {
           <AttendeeCount>{event.going}</AttendeeCount>
           <AttendeeLabel>attendees</AttendeeLabel>
         </AttendeeContainer>
-        <CoffeeButton text={'RSVP'} icon={<ShareIcon/>}/>
+        <CoffeeButton onClick={rsvpAction}>
+          RSVP
+          <ShareIcon/>
+        </CoffeeButton>
       </RsvpContainer>
     </EventContainer>
   )
