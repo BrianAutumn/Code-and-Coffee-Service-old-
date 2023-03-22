@@ -14,12 +14,27 @@ const EventContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  min-height: 150px;
   gap: 15px;
   border-bottom: 1px solid #DCDCDC;
   padding-bottom:15px;
   padding-top:15px;
   width: 100%;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 10px;
+  }
+`
+
+const BreakContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 15px;
+  
+  @media (max-width: 600px) {
+    justify-content: left;
+  }
 `
 
 const DateContainer = styled.div`
@@ -48,9 +63,32 @@ const IconContainer = styled.div`
   width: 60px;
 `
 
+const IconBreakContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap:15px;
+  
+  @media (max-width: 600px) {
+    display: none;
+  }
+`
+
 const CityIcon = styled.img`
   box-shadow: 0 0 16px 16px white inset;
   border-radius: 2px;
+`
+
+const SmallCityIcon = styled.img`
+  box-shadow: 0 0 16px 16px white inset;
+  border-radius: 2px;
+  width: 30px;
+  height: 30px;
+  display: none;
+  
+  @media (max-width: 600px) {
+    display: block;
+  }
 `
 
 const InfoContainer = styled.div`
@@ -58,34 +96,64 @@ const InfoContainer = styled.div`
   flex-direction: column;
   max-width:400px;
   gap:10px;
-`
-const Spacer = styled.div`
-  flex-grow: 1;
+  
+  @media (max-width: 600px) {
+    align-items: center;
+  }
 `
 
-const DateInfo = styled.p`
+const DateInfo = styled.div`
+  display: flex;
+  flex-direction: row;
   font-weight: 400;
   color: #6C6C6C;
   font-size: 16px;
   margin: 0;
+  align-items: end;
+  gap: 10px;
+  
+  @media (max-width: 600px) {
+    font-size: 14px;
+    text-align: center;
+  }
 `
 
 const EventInfo = styled.p`
   font-weight: 700;
   font-size: 24px;
   margin: 0;
+  
+  @media (max-width: 600px) {
+    font-size: 20px;
+    text-align: center;
+  }
 `
 
 const DescriptionInfo = styled.p`
   color: #6C6C6C;
   font-weight: 400;
   margin: 0;
+  
+  @media (max-width: 600px) {
+    font-size: 14px;
+    text-align: center;
+  }
 `
 
 const RsvpContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: end;
+
+  @media (max-width: 600px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`
+
+const RsvpBreakContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const CityContainer = styled.div`
@@ -168,6 +236,7 @@ const EVENT_DESCRIPTION_LENGTH = 125;
 
 export function CoffeeEvent({event}:{event:MeetupEvent}) {
   const [iconImage, setIconImage] = useState(undefined as undefined | ReactNode)
+  const [smallIconImage, setSmallIconImage] = useState(undefined as undefined | ReactNode)
   function rsvpAction(){
     window.open(event.eventUrl, '_blank');
   }
@@ -175,6 +244,7 @@ export function CoffeeEvent({event}:{event:MeetupEvent}) {
   fetch(`/city-icons/${event.group.id}.png`).then(response => {
     if (response.ok) {
       setIconImage(<CityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
+      setSmallIconImage(<SmallCityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
     }
   })
   const date = new Date(event.dateTime);
@@ -182,33 +252,41 @@ export function CoffeeEvent({event}:{event:MeetupEvent}) {
   const descriptionString = event.description.length > EVENT_DESCRIPTION_LENGTH ? event.description.substring(0,EVENT_DESCRIPTION_LENGTH) + ' ...' : event.description;
   return (
     <EventContainer>
-      <DateContainer>
-        <DateNumber>{DayFormatter.format(date)}</DateNumber>
-        <DateMonth>{MonthShortFormatter.format(date)}</DateMonth>
-      </DateContainer>
-      <IconContainer>
-        {iconImage}
-      </IconContainer>
-      <InfoContainer>
-        <DateInfo>{eventDateString}</DateInfo>
-        <EventInfo>{event.title}</EventInfo>
-        <DescriptionInfo>{descriptionString}</DescriptionInfo>
-      </InfoContainer>
-      <Spacer/>
+      <BreakContainer>
+        <IconBreakContainer>
+          <DateContainer>
+            <DateNumber>{DayFormatter.format(date)}</DateNumber>
+            <DateMonth>{MonthShortFormatter.format(date)}</DateMonth>
+          </DateContainer>
+          <IconContainer>
+            {iconImage}
+          </IconContainer>
+        </IconBreakContainer>
+        <InfoContainer>
+          <DateInfo>
+            {smallIconImage}
+            {eventDateString}
+          </DateInfo>
+          <EventInfo>{event.title}</EventInfo>
+          <DescriptionInfo>{descriptionString}</DescriptionInfo>
+        </InfoContainer>
+      </BreakContainer>
       <RsvpContainer>
         <EventImage src={event.imageUrl} alt="rsvp"/>
-        <CityContainer>
-          <CityLabel>{event.venue.city}, {event.venue.state.toUpperCase()}</CityLabel>
-        </CityContainer>
-        <AttendeeContainer>
-          <PeopleIcon />
-          <AttendeeCount>{event.going}</AttendeeCount>
-          <AttendeeLabel>attendees</AttendeeLabel>
-        </AttendeeContainer>
-        <CoffeeButton onClick={rsvpAction}>
-          RSVP
-          <ShareIcon/>
-        </CoffeeButton>
+        <RsvpBreakContainer>
+          <CityContainer>
+            <CityLabel>{event.venue.city}, {event.venue.state.toUpperCase()}</CityLabel>
+          </CityContainer>
+          <AttendeeContainer>
+            <PeopleIcon />
+            <AttendeeCount>{event.going}</AttendeeCount>
+            <AttendeeLabel>attendees</AttendeeLabel>
+          </AttendeeContainer>
+          <CoffeeButton onClick={rsvpAction}>
+            RSVP
+            <ShareIcon/>
+          </CoffeeButton>
+        </RsvpBreakContainer>
       </RsvpContainer>
     </EventContainer>
   )

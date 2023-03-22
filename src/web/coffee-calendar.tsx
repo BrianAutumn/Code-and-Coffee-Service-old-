@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {CoffeeEvent} from "./coffee-event";
 import styled from "styled-components";
 import {CalendarLtr32Regular} from "@fluentui/react-icons";
@@ -8,9 +8,13 @@ const CalendarContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: ${({height}: { height: number }) => height}px;
-  padding: 30px;
+  padding: 15px;
   border-radius: 20px;
   box-shadow: 3px 3px 33px rgba(0, 0, 0, 0.04);
+  
+  @media (max-width: 600px) {
+    padding: 0;
+  }
 `
 
 const EventTitle = styled.h1`
@@ -93,6 +97,15 @@ export function CoffeeCalendar({height}: { height: number }) {
   function moreEventsAction() {
     window.open('https://calendar.google.com/calendar/u/0/r?cid=fs1sc4j8ff3gpgkknc8gvg9c6lljko23@import.calendar.google.com')
   }
+  useEffect(() => {
+    function resizeHandler(){
+      console.log('resize');
+    }
+    window.addEventListener('resize', resizeHandler)
+    return () => {
+      window.removeEventListener('resize', resizeHandler)
+    }
+  })
   getEvents().then((events) => {
     const newCoffeeEvents = [] as Array<JSX.Element>
     for (const event of events) {
