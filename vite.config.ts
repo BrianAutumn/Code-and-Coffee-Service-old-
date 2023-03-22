@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, "src/web/index.ts"),
+      entry: resolve(__dirname, "src/web/index.tsx"),
       name:'Index',
       fileName: "index",
     },
