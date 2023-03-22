@@ -22,6 +22,14 @@ Resources:
       Tags:
         - Key: app
           Value: code-and-coffee-service
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins:
+              - "*"
+            AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - GET
   WebResourcesBucketPolicy:
     Type: AWS::S3::BucketPolicy
     DeletionPolicy: Delete
