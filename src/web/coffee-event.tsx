@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from "react";
+import React, {ReactNode, useEffect, useState} from "react";
 import styled from "styled-components";
 import {People24Filled} from '@fluentui/react-icons'
 import {Share24Filled} from '@fluentui/react-icons'
@@ -241,12 +241,15 @@ export function CoffeeEvent({event}:{event:MeetupEvent}) {
     window.open(event.eventUrl, '_blank');
   }
 
-  fetch(`/city-icons/${event.group.id}.png`).then(response => {
-    if (response.ok) {
-      setIconImage(<CityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
-      setSmallIconImage(<SmallCityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
-    }
+  useEffect(() => {
+    fetch(`/city-icons/${event.group.id}.png`).then(response => {
+      if (response.ok) {
+        setIconImage(<CityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
+        setSmallIconImage(<SmallCityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
+      }
+    })
   })
+
   const date = new Date(event.dateTime);
   const eventDateString = `${WeekdayFormatter.format(date)}, ${MonthLongFormatter.format(date)} ${DayFormatter.format(date)} at ${HourFormatter.format(date)}`
   const descriptionString = event.description.length > EVENT_DESCRIPTION_LENGTH ? event.description.substring(0,EVENT_DESCRIPTION_LENGTH) + ' ...' : event.description;
