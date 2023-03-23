@@ -176,9 +176,9 @@ Resources:
     Type: AWS::CloudFront::CachePolicy
     Properties:
       CachePolicyConfig:
-        MinTTL: 15
-        DefaultTTL: 15
-        MaxTTL: 15
+        MinTTL: 300
+        DefaultTTL: 300
+        MaxTTL: 300
         Name: "CodeAndCoffeeServiceCachePolicy"
         ParametersInCacheKeyAndForwardedToOrigin:
             CookiesConfig:
