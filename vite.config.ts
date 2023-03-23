@@ -11,15 +11,6 @@ export default defineConfig({
       entry: resolve(__dirname, "src/web/index.tsx"),
       name:'Index',
       fileName: "index",
-    },
-    rollupOptions: {
-      external: ["react", "react-dom"],
-      output: {
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-        }
-      }
-    },
+    }
   }
 });
