@@ -242,13 +242,16 @@ export function CoffeeEvent({event}:{event:MeetupEvent}) {
   }
 
   useEffect(() => {
+    console.log('fetching icon')
     fetch(`/city-icons/${event.group.id}.png`).then(response => {
+      console.log('loading complete')
       if (response.ok) {
         setIconImage(<CityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
         setSmallIconImage(<SmallCityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
       }
     })
-  })
+  },[])
+
 
   const date = new Date(event.dateTime);
   const eventDateString = `${WeekdayFormatter.format(date)}, ${MonthLongFormatter.format(date)} ${DayFormatter.format(date)} at ${HourFormatter.format(date)}`

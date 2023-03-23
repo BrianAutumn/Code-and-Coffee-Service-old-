@@ -98,27 +98,21 @@ export function CoffeeCalendar({height}: { height: number }) {
     window.open('https://calendar.google.com/calendar/u/0/r?cid=fs1sc4j8ff3gpgkknc8gvg9c6lljko23@import.calendar.google.com')
   }
   useEffect(() => {
-    function resizeHandler(){
-      console.log('resize');
-    }
-    window.addEventListener('resize', resizeHandler)
-    return () => {
-      window.removeEventListener('resize', resizeHandler)
-    }
-  })
-  getEvents().then((events) => {
-    const newCoffeeEvents = [] as Array<JSX.Element>
-    for (const event of events) {
-      newCoffeeEvents.push(<CoffeeEvent event={event} key={event.id}/>);
-    }
-    newCoffeeEvents.push(
-      <CoffeeButton key={'more-events'} onClick={moreEventsAction}>
-        Subscribe to Calendar
-        <CalendarLtr32Regular/>
-      </CoffeeButton>
-    )
-    setCoffeeEvents(newCoffeeEvents)
-  })
+    getEvents().then((events) => {
+      const newCoffeeEvents = [] as Array<JSX.Element>
+      for (const event of events) {
+        newCoffeeEvents.push(<CoffeeEvent event={event} key={event.id}/>);
+      }
+      newCoffeeEvents.push(
+        <CoffeeButton key={'more-events'} onClick={moreEventsAction}>
+          Subscribe to Calendar
+          <CalendarLtr32Regular/>
+        </CoffeeButton>
+      )
+      setCoffeeEvents(newCoffeeEvents)
+    })
+  },[])
+
 
   return (
     <CalendarContainer height={height}>
