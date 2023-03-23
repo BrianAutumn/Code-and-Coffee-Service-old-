@@ -43,6 +43,8 @@ jobs:
           GOOGLE_CALENDAR_ID: ${{ secrets.GOOGLE_CALENDAR_ID }}
       - name: Build
         run: npm run build
+        env:
+          VITE_ROOT_URL: ${{ secrets.VITE_ROOT_URL }}
       - name: Zip lambda package
         uses: montudor/action-zip@v1
         with:

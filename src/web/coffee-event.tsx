@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {People24Filled} from '@fluentui/react-icons'
 import {Share24Filled} from '@fluentui/react-icons'
 import {MeetupEvent} from "../lambda/dao/meetup.dao";
+import {WebConf} from "./web-conf";
 
 const PeopleIcon = People24Filled;
 const ShareIcon = Share24Filled;
@@ -244,8 +245,8 @@ export function CoffeeEvent({event}:{event:MeetupEvent}) {
   useEffect(() => {
     fetch(`/city-icons/${event.group.id}.png`).then(response => {
       if (response.ok) {
-        setIconImage(<CityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
-        setSmallIconImage(<SmallCityIcon src={`/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
+        setIconImage(<CityIcon src={`${WebConf.rootUrl}/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
+        setSmallIconImage(<SmallCityIcon src={`${WebConf.rootUrl}/city-icons/${event.group.id}.png`} alt={`${event.group.city} Icon`}/>)
       }
     })
   },[])
