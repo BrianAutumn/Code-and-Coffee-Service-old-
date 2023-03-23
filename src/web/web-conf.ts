@@ -1,4 +1,4 @@
 export const WebConf = {
   smBreakpoint: 600,
-  rootUrl:'https://d3ldp4mijqfzeg.cloudfront.net/',
+  rootUrl:import.meta.env.VITE_ROOT_URL,
 }
